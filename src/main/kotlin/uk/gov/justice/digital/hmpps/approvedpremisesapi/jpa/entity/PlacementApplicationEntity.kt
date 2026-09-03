@@ -27,6 +27,7 @@ import uk.gov.justice.digital.hmpps.approvedpremisesapi.api.model.WithdrawPlacem
 import uk.gov.justice.digital.hmpps.approvedpremisesapi.cas1.dto.PlacementApplicationDecisionDto
 import uk.gov.justice.digital.hmpps.approvedpremisesapi.jpa.entity.cas1.Cas1PlacementDates
 import uk.gov.justice.digital.hmpps.approvedpremisesapi.jpa.entity.cas1.Cas1ReleaseType
+import uk.gov.justice.digital.hmpps.approvedpremisesapi.service.cas1.Cas1RequestForPlacementService
 import java.time.LocalDate
 import java.time.OffsetDateTime
 import java.util.UUID
@@ -169,6 +170,15 @@ data class PlacementApplicationEntity(
    * for authorised placement date
    */
   var authorisedDuration: Int? = null,
+
+  /**
+   * Default duration calculated for placements based upon logic defined in [Cas1RequestForPlacementService.defaultDurations]
+   *
+   * This will be provided for placement applications where the user cannot specify/determine duration themselves
+   *
+   * added in 2026-08 and has not been backfilled
+   */
+  var calculatedPlacementDuration: Int? = null,
 
   var expectedArrivalFlexible: Boolean? = null,
 
