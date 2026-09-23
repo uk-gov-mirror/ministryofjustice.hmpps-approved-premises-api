@@ -24,7 +24,6 @@ class Cas2ExternalApplicationServiceTest {
 
   private val cas2ExternalApplicationService = Cas2ExternalApplicationService(
     mockCas2ApplicationRepository,
-    mockCas2PersistedApplicationStatusFinder,
     "http://frontend/applications/#id",
     "http://frontend/assess/applications/#applicationId/overview",
   )
@@ -94,7 +93,7 @@ class Cas2ExternalApplicationServiceTest {
         uiUrl = "http://frontend/assess/applications/$id/overview",
         id = id,
         submittedApplication = Cas2ExternalSubmittedApplicationDto(
-          latestAssessmentStatus = status.name,
+          latestAssessmentStatus = status.status,
           submittedAt = submittedAt,
         ),
       )

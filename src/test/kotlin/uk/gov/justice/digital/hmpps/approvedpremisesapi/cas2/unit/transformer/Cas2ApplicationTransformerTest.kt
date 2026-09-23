@@ -11,6 +11,7 @@ import uk.gov.justice.digital.hmpps.approvedpremisesapi.api.model.ApplicationSta
 import uk.gov.justice.digital.hmpps.approvedpremisesapi.api.model.Person
 import uk.gov.justice.digital.hmpps.approvedpremisesapi.api.model.ServiceType
 import uk.gov.justice.digital.hmpps.approvedpremisesapi.cas2.model.Cas2Assessment
+import uk.gov.justice.digital.hmpps.approvedpremisesapi.cas2.model.Cas2AssessmentStatus
 import uk.gov.justice.digital.hmpps.approvedpremisesapi.cas2.model.Cas2CohortDto
 import uk.gov.justice.digital.hmpps.approvedpremisesapi.cas2.model.Cas2PersistedApplicationStatus
 import uk.gov.justice.digital.hmpps.approvedpremisesapi.cas2.model.Cas2ServiceOrigin
@@ -309,7 +310,7 @@ class Cas2ApplicationTransformerTest {
   inner class TransformJpaToCas2ReferralHistory {
     @Test
     fun `transforms a JPA application to referral history correctly using status name`() {
-      val statusId = UUID.randomUUID()
+      val statusId = UUID.fromString("f13bbdd6-44f1-4362-b9d3-e6f1298b1bf9")
       val application = submittedCas2ApplicationFactory
         .withAssessment(Cas2AssessmentEntityFactory().withServiceOrigin(Cas2ServiceOrigin.BAIL).produce())
         .withReferringPrisonCode("BRI")
@@ -343,7 +344,7 @@ class Cas2ApplicationTransformerTest {
       assertThat(result.type).isEqualTo(ServiceType.CAS2v2)
       assertThat(result.applicationSubmittedDate).isEqualTo(application.submittedAt!!.toLocalDate())
       assertThat(result.applicationLastUpdatedDate).isEqualTo(statusUpdate.createdAt.toLocalDate())
-      assertThat(result.applicationStatus).isEqualTo("cancelled")
+      assertThat(result.applicationStatus).isEqualTo(Cas2AssessmentStatus.CANCELLED)
       assertThat(result.referralRejectionReason).isEqualTo("cancelled")
       assertThat(result.localAuthorityArea).isEqualTo("HMP Bristol")
       assertThat(result.pdu).isEqualTo("Area 1, Area 2")
@@ -354,7 +355,7 @@ class Cas2ApplicationTransformerTest {
 
     @Test
     fun `transforms a JPA application to referral history correctly when withdrawn`() {
-      val statusId = UUID.randomUUID()
+      val statusId = UUID.fromString("004e2419-9614-4c1e-a207-a8418009f23d")
       val application = submittedCas2ApplicationFactory
         .withAssessment(Cas2AssessmentEntityFactory().withServiceOrigin(Cas2ServiceOrigin.BAIL).produce())
         .withReferringPrisonCode("BRI")
@@ -386,7 +387,7 @@ class Cas2ApplicationTransformerTest {
       assertThat(result.type).isEqualTo(ServiceType.CAS2v2)
       assertThat(result.applicationSubmittedDate).isEqualTo(application.submittedAt!!.toLocalDate())
       assertThat(result.applicationLastUpdatedDate).isEqualTo(statusUpdate.createdAt.toLocalDate())
-      assertThat(result.applicationStatus).isEqualTo("withdrawn")
+      assertThat(result.applicationStatus).isEqualTo(Cas2AssessmentStatus.WITHDRAWN)
       assertThat(result.referralRejectionReason).isEqualTo("withdrawn")
       assertThat(result.localAuthorityArea).isEqualTo("BRI")
       assertThat(result.referredBy).isEqualTo(application.createdByUser.name)
@@ -396,7 +397,7 @@ class Cas2ApplicationTransformerTest {
 
     @Test
     fun `transforms a JPA application to referral history correctly when not rejected`() {
-      val statusId = UUID.randomUUID()
+      val statusId = UUID.fromString("ba4d8432-250b-4ab9-81ec-7eb4b16e5dd1")
 
       val application = submittedCas2ApplicationFactory
         .withAssessment(Cas2AssessmentEntityFactory().withServiceOrigin(Cas2ServiceOrigin.BAIL).produce())
@@ -429,7 +430,7 @@ class Cas2ApplicationTransformerTest {
       assertThat(result.type).isEqualTo(ServiceType.CAS2v2)
       assertThat(result.applicationSubmittedDate).isEqualTo(application.submittedAt!!.toLocalDate())
       assertThat(result.applicationLastUpdatedDate).isEqualTo(statusUpdate.createdAt.toLocalDate())
-      assertThat(result.applicationStatus).isEqualTo("awaitingDecision")
+      assertThat(result.applicationStatus).isEqualTo(Cas2AssessmentStatus.AWAITING_DECISION)
       assertThat(result.referralRejectionReason).isNull()
       assertThat(result.localAuthorityArea).isEqualTo("BRI")
       assertThat(result.referredBy).isEqualTo(application.createdByUser.name)
