@@ -9,7 +9,6 @@ import uk.gov.justice.digital.hmpps.approvedpremisesapi.cas2.reporting.Cas2DataS
 import uk.gov.justice.digital.hmpps.approvedpremisesapi.cas3.reporting.Cas3DataScienceReportRepository
 import java.io.File
 import java.time.LocalDate
-import java.util.UUID
 
 @Service
 class DataScienceReportsGenerator(
@@ -22,9 +21,8 @@ class DataScienceReportsGenerator(
   @Transactional(readOnly = true)
   fun generateReport(documentSubType: CasDocumentSubType, executionDate: LocalDate, targetFile: File): GeneratedReport {
     val filename = "${documentSubType.value.lowercase()}_data_science_report_$executionDate.csv"
-    val documentUuid = UUID.randomUUID()
 
-    log.info("Generating $documentSubType Data Science report (filename: $filename, documentUuid: $documentUuid)")
+    log.info("Generating $documentSubType Data Science report (filename: $filename)")
 
     targetFile.outputStream().buffered().use { outputStream ->
       CsvJdbcResultSetConsumer(outputStream).use { consumer ->
@@ -41,7 +39,6 @@ class DataScienceReportsGenerator(
 
     return GeneratedReport(
       filename = filename,
-      documentUuid = documentUuid,
       documentSubType = documentSubType,
       executionDate = executionDate,
     )
@@ -56,7 +53,6 @@ enum class CasDocumentSubType(val value: String) {
 
 data class GeneratedReport(
   val filename: String,
-  val documentUuid: UUID,
   val documentSubType: CasDocumentSubType,
   val executionDate: LocalDate,
 )

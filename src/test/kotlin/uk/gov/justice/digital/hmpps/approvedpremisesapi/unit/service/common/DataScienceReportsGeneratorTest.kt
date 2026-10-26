@@ -56,7 +56,6 @@ class DataScienceReportsGeneratorTest {
       assertThat(report.documentSubType).isEqualTo(CasDocumentSubType.CAS1)
       assertThat(report.executionDate).isEqualTo(executionDate)
       assertThat(report.filename).isEqualTo("cas1_data_science_report_2026-10-08.csv")
-      assertThat(report.documentUuid).isNotNull
       assertThat(tempFile).exists()
       assertThat(tempFile.readText()).contains("\"header1\",\"header2\"")
 
