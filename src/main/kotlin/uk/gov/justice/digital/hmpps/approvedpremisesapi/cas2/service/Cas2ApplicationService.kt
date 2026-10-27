@@ -155,7 +155,14 @@ class Cas2ApplicationService(
     }
   }
 
-  fun findSubmittedApplicationsByCrnAndCohorts(crn: String, cohorts: List<Cas2Cohort>): List<Cas2ApplicationEntity> = cas2ApplicationRepository.findSubmittedApplicationsByCrnAndCohorts(crn, cohorts)
+  fun findSubmittedApplicationsByCrnAndCohorts(crn: String, cohorts: List<Cas2Cohort>): List<Cas2ApplicationEntity> = cas2ApplicationRepository.findSubmittedApplicationsByCrnAndCohorts(crn, cohorts).filter {
+    isArchived(it) ||
+      it.getLatestStatusUpdate()?.status in listOf(
+        Cas2AssessmentStatus.WITHDRAWN,
+        Cas2AssessmentStatus.OFFER_DECLINED,
+        Cas2AssessmentStatus.CANCELLED,
+      )
+  }
 
   @SuppressWarnings("TooGenericExceptionThrown")
   fun createCas2Application(
