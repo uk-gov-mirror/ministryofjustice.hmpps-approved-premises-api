@@ -23,6 +23,7 @@ import uk.gov.justice.digital.hmpps.approvedpremisesapi.jpa.entity.DomainEventTy
 import uk.gov.justice.digital.hmpps.approvedpremisesapi.jpa.entity.LocalAuthorityAreaEntity
 import uk.gov.justice.digital.hmpps.approvedpremisesapi.jpa.entity.ProbationDeliveryUnitEntity
 import uk.gov.justice.digital.hmpps.approvedpremisesapi.jpa.entity.UserEntity
+import uk.gov.justice.digital.hmpps.approvedpremisesapi.util.randomDateTimeAfter
 import uk.gov.justice.digital.hmpps.approvedpremisesapi.util.randomStringUpperCase
 import java.time.Instant
 import java.time.LocalDate
@@ -86,6 +87,8 @@ abstract class Cas3IntegrationTestBase : IntegrationTestBase() {
     withType(DomainEventType.CAS3_PREMISES_UNARCHIVED)
     withCas3TransactionId(transactionId)
     withCas3CancelledAt(cancelledAt)
+    withOccurredAt(OffsetDateTime.now().minusDays(7))
+    withCreatedAt(OffsetDateTime.now().randomDateTimeAfter(1))
     withData(
       jsonMapper.writeValueAsString(
         CAS3PremisesUnarchiveEvent(
@@ -209,6 +212,8 @@ abstract class Cas3IntegrationTestBase : IntegrationTestBase() {
     withType(DomainEventType.CAS3_BEDSPACE_UNARCHIVED)
     withCas3TransactionId(transactionId)
     withCas3CancelledAt(cancelledAt)
+    withOccurredAt(OffsetDateTime.now().minusDays(7))
+    withCreatedAt(OffsetDateTime.now().randomDateTimeAfter(1))
     withData(
       jsonMapper.writeValueAsString(
         CAS3BedspaceUnarchiveEvent(
